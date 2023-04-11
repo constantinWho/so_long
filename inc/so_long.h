@@ -6,7 +6,7 @@
 /*   By: chustei <chustei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 12:54:22 by chustei           #+#    #+#             */
-/*   Updated: 2023/03/31 17:42:07 by chustei          ###   ########.fr       */
+/*   Updated: 2023/04/05 17:30:26 by chustei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_game
 	t_textures		texture;
 	t_imgs			img;
 	int				num_collects;
+	int				removed_collects;
 	t_collectible	collectibles[1000];
 	t_exit			exit;
 	int				move;
@@ -64,6 +65,8 @@ typedef struct s_game
 	int				height;
 	int				p_x;
 	int				p_y;
+	int				e_x;
+	int				e_y;
 	int				poss_collects;
 	int				poss_exits;
 	char			**matrix;
@@ -83,6 +86,10 @@ int		check_collects(void *param);
 void	remove_collect(void	*param, int x, int y);
 void	count_moves(mlx_key_data_t keydata, int y, int x, void *param);
 void	key_hook(mlx_key_data_t keydata, void	*param);
-void	store_player_and_collectibles(void *param, int x, int y);
+void	store_imgs(void *param);
+int		check_if_solvable(void *param);
+void	free_matrix(char **matrix);
+void	free_textures(void *param);
+void	ft_error(char *str);
 
 #endif

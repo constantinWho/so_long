@@ -6,13 +6,23 @@
 /*   By: chustei <chustei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 20:15:09 by chustei           #+#    #+#             */
-/*   Updated: 2023/03/31 16:35:27 by chustei          ###   ########.fr       */
+/*   Updated: 2023/04/05 16:31:11 by chustei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lib/MLX42/include/MLX42/MLX42.h"
 #include "../lib/libft/inc/libft.h"
 #include "../inc/so_long.h"
+
+void	check_finish(void *param, int x, int y)
+{
+	t_game	*game;
+
+	game = param;
+	if (game->removed_collects == game->num_collects && \
+		game->matrix[y / 64][x / 64] == 'E')
+		mlx_close_window(game->mlx);
+}
 
 void	remove_collect(void	*param, int x, int y)
 {
@@ -22,7 +32,7 @@ void	remove_collect(void	*param, int x, int y)
 	t_game	*game;
 
 	game = param;
-	if (game->matrix[y / 64][x / 64] == 'C')
+	if (game->matrix && game->matrix[y / 64][x / 64] == 'C')
 	{
 		game->matrix[y / 64][x / 64] = '0';
 		i = -1;
@@ -31,7 +41,10 @@ void	remove_collect(void	*param, int x, int y)
 			coll_x = game->collectibles[i].x;
 			coll_y = game->collectibles[i].y;
 			if (coll_x == x / 64 && coll_y == y / 64)
-				mlx_delete_image (game->mlx, game->collectibles[i].img);
+			{
+				mlx_delete_image(game->mlx, game->collectibles[i].img);
+				game->removed_collects++;
+			}
 		}
 	}
 }
@@ -80,4 +93,5 @@ void	key_hook(mlx_key_data_t keydata, void	*param)
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		mlx_close_window(game->mlx);
 	remove_collect(game, *x, *y);
+	check_finish(game, *x, *y);
 }

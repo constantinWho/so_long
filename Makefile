@@ -1,12 +1,12 @@
 NAME	:= so_long
-CFLAGS	:= -Wextra -Wall -Werror
+CFLAGS	:= -Wextra -Wall -Werror -g3
 LIBMLX	:= ./lib/MLX42
 LIBFT	:= ./lib/libft
 
 HEADERS	:= -I ./inc/ -I $(LIBMLX)/include -I $(LIBFT)/inc
 LIBS	:= $(LIBFT)/libft.a $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 SRCS	:= src/main.c src/init_map.c src/draw_map.c src/check_map.c \
-           src/check_utils.c src/events.c \
+           src/check_utils.c src/events.c src/check_if_solvable.c src/free_memory.c\
 
 OBJS	:= ${SRCS:.c=.o}
 
@@ -22,7 +22,7 @@ libmlx:
 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)"
 
 $(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) -fsanitize=address -g3
 
 clean:
 	@rm -f $(OBJS)
